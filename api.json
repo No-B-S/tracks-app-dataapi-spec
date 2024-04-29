@@ -3,13 +3,8 @@
   "info": {
     "title": "Song API",
     "version": "1.0.0",
-    "description": "An API to manage songs and their trends"
+    "description": "An API to get songs and their trends"
   },
-  "servers": [
-    {
-      "url": "http://api.example.com/v1"
-    }
-  ],
   "paths": {
     "/songs": {
       "get": {
