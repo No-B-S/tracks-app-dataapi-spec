@@ -43,7 +43,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/Song"
+                    "$ref": "#/components/schemas/SongWithoutStats"
                   }
                 }
               }
@@ -101,6 +101,26 @@
   },
   "components": {
     "schemas": {
+      "SongWithoutStats": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "name": {
+            "type": "string"
+          },
+          "artist": {
+            "type": "string"
+          },
+          "image": {
+            "type": "string"
+          },
+          "trend": {
+            "$ref": "#/components/schemas/SongTrend"
+          }
+        }
+      },
       "Song": {
         "type": "object",
         "properties": {
