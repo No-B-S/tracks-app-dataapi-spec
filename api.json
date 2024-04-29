@@ -1,98 +1,206 @@
 {
   "openapi": "3.0.0",
   "info": {
-    "title": "Bookstore API",
+    "title": "Song API",
     "version": "1.0.0",
-    "description": "An API to manage books in a bookstore"
+    "description": "An API to manage songs and their trends"
   },
   "servers": [
     {
-      "url": "http://api.example.com/v1",
-      "description": "Production server"
+      "url": "http://api.example.com/v1"
     }
   ],
   "paths": {
-    "/books": {
+    "/songs": {
       "get": {
-        "summary": "Retrieve all books",
+        "summary": "Retrieve songs",
+        "parameters": [
+          {
+            "name": "name",
+            "in": "query",
+            "description": "Filter songs by name (substring)",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "ids",
+            "in": "query",
+            "description": "Filter songs by IDs",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "integer"
+              }
+            }
+          }
+        ],
         "responses": {
           "200": {
-            "description": "A list of books",
+            "description": "A list of songs",
             "content": {
               "application/json": {
                 "schema": {
                   "type": "array",
                   "items": {
-                    "type": "object",
-                    "properties": {
-                      "id": {
-                        "type": "integer"
-                      },
-                      "title": {
-                        "type": "string"
-                      },
-                      "author": {
-                        "type": "string"
-                      },
-                      "isbn": {
-                        "type": "string"
-                      }
-                    }
+                    "$ref": "#/components/schemas/Song"
                   }
                 }
               }
             }
           }
         }
-      },
-      "post": {
-        "summary": "Add a new book",
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "title": {
-                    "type": "string"
-                  },
-                  "author": {
-                    "type": "string"
-                  },
-                  "isbn": {
-                    "type": "string"
-                  }
-                },
-                "required": ["title", "author"]
-              }
+      }
+    },
+    "/songs/{id}": {
+      "get": {
+        "summary": "Retrieve a song by ID",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "ID of the song to retrieve",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "start_date",
+            "in": "query",
+            "description": "Start date of the trend (YYYY-MM-DD)",
+            "schema": {
+              "type": "string",
+              "format": "date"
+            }
+          },
+          {
+            "name": "end_date",
+            "in": "query",
+            "description": "End date of the trend (YYYY-MM-DD)",
+            "schema": {
+              "type": "string",
+              "format": "date"
             }
           }
-        },
+        ],
         "responses": {
-          "201": {
-            "description": "The newly created book",
+          "200": {
+            "description": "The requested song",
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "properties": {
-                    "id": {
-                      "type": "integer"
-                    },
-                    "title": {
-                      "type": "string"
-                    },
-                    "author": {
-                      "type": "string"
-                    },
-                    "isbn": {
-                      "type": "string"
-                    }
-                  }
+                  "$ref": "#/components/schemas/Song"
                 }
               }
             }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Song": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "name": {
+            "type": "string"
+          },
+          "artist": {
+            "type": "string"
+          },
+          "image": {
+            "type": "string"
+          },
+          "trend": {
+            "$ref": "#/components/schemas/SongTrend"
+          },
+          "stats": {
+            "$ref": "#/components/schemas/SongStats"
+          }
+        }
+      },
+      "SongTrend": {
+        "type": "object",
+        "properties": {
+          "start_date": {
+            "type": "string",
+            "format": "date"
+          },
+          "end_date": {
+            "type": "string",
+            "format": "date"
+          },
+          "watchers": {
+            "type": "array",
+            "items": {
+              "type": "integer"
+            }
+          },
+          "posts": {
+            "type": "array",
+            "items": {
+              "type": "integer"
+            }
+          },
+          "likes": {
+            "type": "array",
+            "items": {
+              "type": "integer"
+            }
+          },
+          "shares": {
+            "type": "array",
+            "items": {
+              "type": "integer"
+            }
+          },
+          "comments": {
+            "type": "array",
+            "items": {
+              "type": "integer"
+            }
+          }
+        }
+      },
+      "SongStats": {
+        "type": "object",
+        "properties": {
+          "streams": {
+            "type": "integer",
+            "description": "Amount of song streams"
+          },
+          "playlists": {
+            "type": "integer",
+            "description": "Amount of song playlists"
+          },
+          "popularity": {
+            "type": "integer",
+            "description": "Song popularity"
+          },
+          "posts": {
+            "type": "integer",
+            "description": "Number of posts"
+          },
+          "likes": {
+            "type": "integer",
+            "description": "Number of likes"
+          },
+          "views": {
+            "type": "integer",
+            "description": "Number of views"
+          },
+          "interest": {
+            "type": "integer",
+            "description": "Number of interests"
+          },
+          "shazams": {
+            "type": "integer",
+            "description": "Number of shazams"
           }
         }
       }
